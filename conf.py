@@ -10,8 +10,6 @@ dir_name = "gitauto"
 os_type = platform.system()
 
 
-
-
 class ThePathWin:
     home_path = ""
     path_dir = Path(os.path.join(home_path, dir_name))
