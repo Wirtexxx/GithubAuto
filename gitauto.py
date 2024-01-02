@@ -22,6 +22,14 @@ import os
 import time
 from github import Github
 import click
+import subprocess
+from pathlib import Path
+import platform
+
+
+
+
+os_type = platform.system()
 
 
 cli = click.Group()
@@ -102,8 +110,30 @@ def init(github_token, repo_owner, repo_name):
             f"REPO-NAME={repo_name}"
         )
 
+class Setup:
+    def __init__(self):
+        self.project_dir = Path(__file__).resolve().parent
+        self.link_name = "gitauto"
+        self.dir_name = "gitauto"
+        self.source_path = self.project_dir / f"{self.link_name}.py"
+        self.link_path_mac = f"/usr/local/bin/{self.link_name}"
+        self.link_path_windows = f"/usr/local/bin/{self.link_name}"
+
+    def create_namespace(self):
+        if os_type.lower() == "darwin":
+            subprocess.call(["ln", "-s", self.source_path, self.link_path_mac])
+            subprocess.run(['chmod', '+x', self.source_path])
+            print(f"Namespace '{self.link_name}' created successfully.")
+
+        if os_type.lower() == "windows":
+            command = ['netsh', 'namespace', 'add', 'prefix', self.link_name, '1']
+            subprocess.run(command, check=True)
+            print(f"Namespace '{self.link_name}' created successfully.")
+
 
 if __name__ == "__main__":
+    setup = Setup()
+    setup.create_namespace()
     cli.add_command(init)
     cli.add_command(auto_pull)
     cli()
