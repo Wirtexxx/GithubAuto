@@ -125,11 +125,6 @@ class Setup:
             subprocess.run(['chmod', '+x', self.source_path])
             print(f"Namespace '{self.link_name}' created successfully.")
 
-        if os_type.lower() == "windows":
-            command = ['netsh', 'namespace', 'add', 'prefix', self.link_name, '1']
-            subprocess.run(command, check=True)
-            print(f"Namespace '{self.link_name}' created successfully.")
-
 
 if __name__ == "__main__":
     setup = Setup()
